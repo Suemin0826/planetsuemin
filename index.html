@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>From Planet Shannon - Puzzle Mission</title>
+  <style>
+    body {
+      background-color: #f5f0e6;
+      color: #2d2d2d;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .console-box {
+      border: 2px solid #444;
+      padding: 20px;
+      background-color: #d4e6d4;
+      width: 80%;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 0 10px #999;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 10px;
+    }
+    #messageDisplay {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #006400;
+    }
+    .retry-btn {
+      background-color: #ffaaaa;
+      margin-top: 10px;
+    }
+    .poem {
+      font-style: italic;
+      margin-top: 10px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="console-box">
+    <h2>Decrypt This: <span id="puzzleCode">[Puzzle Code]</span></h2>
+    <input type="text" id="userInput" placeholder="Enter the password" />
+    <button onclick="checkAnswer()">Submit</button>
+    <div id="messageDisplay"></div>
+  </div>
+
+  <script>
+    const puzzles = [
+      { code: '3 # E', answer: 'LOVE' },
+      { code: 'Δ 7 B', answer: 'SUN' },
+      { code: 'Ω 9 K', answer: 'GALAXY' },
+      { code: '∞ 2 Z', answer: 'YOU' },
+      { code: '★ 5 M', answer: 'SAFE' },
+      { code: '♣ 8 R', answer: 'MISS' },
+      { code: '§ 1 Q', answer: 'MATCHA' },
+      { code: '♥ 6 T', answer: 'ORBIT' },
+      { code: 'Ψ 4 L', answer: 'STARS' },
+      { code: '♠ 0 N', answer: 'KISS' }
+    ];
+
+    const lovePoems = [
+      "How do I love thee? Let me count the ways.",
+      "I love you more than I love myself.",
+      "You're the gravity to my orbit, Callan.",
+      "I miss you a lot. Like… a lot lot.",
+      "You make ordinary days feel extraordinary.",
+      "No matter how many galaxies I cross, it’s always you.",
+      "You’re my safe place, even in the middle of a cosmic war.",
+      "You're the reason I’d go through 30 Halo missions without saving.",
+      "I love you more than my favorite café’s matcha latte.",
+      "I like you when you speak because you're always present.",
+      "I want to do with you what spring does with the cherry trees.",
+      "Love is composed of a single soul inhabiting two bodies.",
+      "When I saw you I fell in love, and you smiled because you knew.",
+      "My heart is, and always will be, yours.",
+      "You had me at hello.",
+      "Whatever our souls are made of, yours and mine are the same.",
+      "Your voice is my favorite sound.",
+      "You're like a ray of warm sunlight to me.",
+      "Even the stars are jealous of how you shine.",
+      "Every love story is beautiful, but ours is my favorite.",
+      "Being in your arms is my favorite place.",
+      "You are my today and all of my tomorrows.",
+      "The best thing to hold onto in life is each other.",
+      "Home is wherever I'm with you.",
+      "Forever is a long time, but I wouldn’t mind spending it with you.",
+      "I swear I couldn’t love you more than I do right now, and yet I know I will tomorrow.",
+      "My love for you is a journey—starting at forever and ending at never.",
+      "You’re my end and my beginning.",
+      "I look at you and see the rest of my life in front of my eyes.",
+      "Yours is the light by which my spirit’s born."
+    ];
+
+    let currentPuzzle = null;
+    let solvedPuzzles = [];
+
+    function getRandomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function setNewPuzzle() {
+      const unsolved = puzzles.filter(p => !solvedPuzzles.includes(p.code));
+      if (unsolved.length === 0) {
+        document.getElementById("puzzleCode").innerText = "Mission Complete!";
+        document.getElementById("messageDisplay").innerHTML = "<h3>🎉 All puzzles solved!</h3><p>Callan, your mission is over, but your love journey continues 💖</p>";
+        document.getElementById("userInput").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        return;
+      }
+      currentPuzzle = getRandomItem(unsolved);
+      document.getElementById("puzzleCode").innerText = currentPuzzle.code;
+      document.getElementById("messageDisplay").innerHTML = "";
+      document.getElementById("userInput").value = "";
+    }
+
+    function checkAnswer() {
+      if (!currentPuzzle) {
+        setNewPuzzle();
+      }
+
+      const input = document.getElementById("userInput").value.trim().toUpperCase();
+      const messageBox = document.getElementById("messageDisplay");
+      messageBox.innerHTML = "";
+
+      if (input === currentPuzzle.answer) {
+        solvedPuzzles.push(currentPuzzle.code);
+        const poem = getRandomItem(lovePoems);
+        messageBox.innerHTML = `<h3>✅ Mission Success!</h3><p class='poem'>"${poem}"</p>`;
+        setTimeout(setNewPuzzle, 3000);
+      } else {
+        messageBox.innerHTML = `<p>❌ Try Again, Spartan.</p><button class='retry-btn' onclick='setNewPuzzle()'>Re-Try</button>`;
+      }
+    }
+
+    window.onload = setNewPuzzle;
+  </script>
+</body>
+</html>
