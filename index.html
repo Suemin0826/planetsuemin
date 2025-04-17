@@ -181,23 +181,23 @@
     }
 
     function checkAnswer() {
-      if (!currentPuzzle) {
-        setNewPuzzle();
-      }
+  if (!currentPuzzle) {
+    setNewPuzzle();  // If currentPuzzle is null, start a new puzzle
+  }
 
-      const input = document.getElementById("userInput").value.trim().toUpperCase();
-      const messageBox = document.getElementById("messageDisplay");
-      messageBox.innerHTML = "";
+  const input = document.getElementById("userInput").value.trim().toUpperCase();  // User input
+  const messageBox = document.getElementById("messageDisplay");
+  messageBox.innerHTML = "";
 
-      if (input === currentPuzzle.answer) {
-        solvedPuzzles.push(currentPuzzle.code);
-        const poem = getRandomItem(lovePoems);
-        messageBox.innerHTML = `<h3>✅ Mission Success!</h3><p class='poem'>"${poem}"</p>`;
-        setTimeout(setNewPuzzle, 3000);
-      } else {
-        messageBox.innerHTML = `<p>❌ Try Again, Spartan.</p><button class='retry-btn' onclick='setNewPuzzle()'>Re-Try</button>`;
-      }
-    }
+  if (input === currentPuzzle.answer.toUpperCase()) {  // Answer check, ensuring both are uppercased
+    solvedPuzzles.push(currentPuzzle.code);  // Mark puzzle as solved
+    const poem = getRandomItem(lovePoems);  // Get a random poem
+    messageBox.innerHTML = `<h3>✅ Mission Success!</h3><p class='poem'>"${poem}"</p>`;  // Show success message and poem
+    setTimeout(setNewPuzzle, 3000);  // Proceed to next puzzle after 3 seconds
+  } else {
+    messageBox.innerHTML = `<p>❌ Try Again, Spartan.</p><button class='retry-btn' onclick='setNewPuzzle()'>Re-Try</button>`;  // Retry message
+  }
+}
 
     window.onload = setNewPuzzle;
   </script>
